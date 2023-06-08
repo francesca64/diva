@@ -116,7 +116,7 @@ impl Command {
 
     pub fn set_stdin(&mut self, cfg: impl Into<Stdio>) -> &mut Self {
         let cfg = cfg.into();
-        log::debug!("setting stdin to {:?} on command {:?}", cfg, self.display);
+        log::debug!("setting stdin to {:?} on command {cfg:?}", self.display);
         self.inner.stdin(cfg);
         self
     }
@@ -180,7 +180,7 @@ impl Command {
 
     pub fn set_stderr(&mut self, cfg: impl Into<Stdio>) -> &mut Self {
         let cfg = cfg.into();
-        log::debug!("setting stderr to {:?} on command {:?}", cfg, self.display);
+        log::debug!("setting stderr to {cfg:?} on command {:?}", self.display);
         self.inner.stderr(cfg);
         self
     }
@@ -214,9 +214,7 @@ impl Command {
         let key = key.as_ref();
         let val = val.as_ref();
         log::debug!(
-            "adding env var {:?} = {:?} to command {:?}",
-            key,
-            val,
+            "adding env var {key:?} = {val:?} to command {:?}",
             self.display
         );
         self.inner.env(key, val);
@@ -248,7 +246,7 @@ impl Command {
 
     pub fn add_arg(&mut self, name: impl AsRef<OsStr>) -> &mut Self {
         let name = name.as_ref();
-        log::debug!("adding arg {:?} to command {:?}", name, self.display);
+        log::debug!("adding arg {name:?} to command {:?}", self.display);
         self.inner.arg(name);
         self.push_display(name);
         self
@@ -314,13 +312,13 @@ impl Command {
             self.inner.pre_exec(move || match libc::fork() {
                 -1 => {
                     let err = std::io::Error::last_os_error();
-                    log::error!("`fork` failed for command {:?}: {}", display, err);
+                    log::error!("`fork` failed for command {display:?}: {err}");
                     Err(err)
                 }
                 0 => {
                     if libc::setsid() == -1 {
                         let err = std::io::Error::last_os_error();
-                        log::error!("`setsid` failed for command {:?}: {}", display, err);
+                        log::error!("`setsid` failed for command {display:?}: {err}");
                         Err(err)
                     } else {
                         Ok(())

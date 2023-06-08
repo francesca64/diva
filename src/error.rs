@@ -71,9 +71,9 @@ impl Display for Error {
             command: &str,
             status: ExitStatus,
         ) -> fmt::Result {
-            write!(f, "Command {:?} didn't complete successfully, ", command)?;
+            write!(f, "Command {command:?} didn't complete successfully, ")?;
             if let Some(exit_code) = status.code() {
-                write!(f, "exiting with code {}.", exit_code)
+                write!(f, "exiting with code {exit_code}.")
             } else {
                 write!(f, "but returned no exit code.")
             }
@@ -82,13 +82,13 @@ impl Display for Error {
         match &self.cause {
             Cause::SpawnFailed(err) => write!(
                 f,
-                "Failed to spawn child process for command {:?}: {}",
-                self.command, err
+                "Failed to spawn child process for command {:?}: {err}",
+                self.command
             ),
             Cause::WaitFailed(err) => write!(
                 f,
-                "Failed to wait for child process for command {:?} to exit: {}",
-                self.command, err
+                "Failed to wait for child process for command {:?} to exit: {err}",
+                self.command
             ),
             Cause::CommandFailed(status) => command_failed(f, &self.command, *status),
             Cause::CommandFailedWithOutput(output) => {
@@ -105,8 +105,8 @@ impl Display for Error {
             }
             Cause::InvalidUtf8 { stream, source, .. } => write!(
                 f,
-                "{} for command {:?} contained invalid UTF-8: {}",
-                stream, self.command, source,
+                "{stream} for command {:?} contained invalid UTF-8: {source}",
+                self.command
             ),
         }
     }
