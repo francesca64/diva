@@ -1,6 +1,6 @@
 # `diva`
 
-[![crates.io badge](http://meritbadge.herokuapp.com/diva)](https://crates.io/crates/diva)
+[![crates.io badge](https://img.shields.io/crates/v/diva.svg)](https://crates.io/crates/diva)
 [![docs.rs badge](https://docs.rs/diva/badge.svg)](https://docs.rs/diva)
 [![CI Status](https://github.com/francesca64/diva/workflows/CI/badge.svg)](https://github.com/francesca64/diva/actions)
 
