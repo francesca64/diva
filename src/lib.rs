@@ -302,11 +302,10 @@ impl Command {
     pub fn run_and_detach(&mut self) -> Result<()> {
         log::info!("running command {:?} and detaching", self.display);
         // This is pretty much lifted from the implementation in Alacritty:
-        // https://github.com/alacritty/alacritty/blob/8bd2c13490f8cb6ad6b0c1104f9586b3554efea2/alacritty/src/daemon.rs
+        // hhttps://github.com/alacritty/alacritty/blob/4b92388396c6da783809c7ce511b5cf6be8a0624/alacritty/src/daemon.rs
         #[cfg(unix)]
         unsafe {
             use std::os::unix::process::CommandExt as _;
-
             let display = self.display.clone();
             self.inner.pre_exec(move || match libc::fork() {
                 -1 => {
@@ -327,10 +326,11 @@ impl Command {
             });
         }
         #[cfg(windows)]
-        unsafe {
+        {
             use std::os::windows::process::CommandExt;
-            use winapi::um::winbase::{CREATE_NEW_PROCESS_GROUP, CREATE_NO_WINDOW};
-
+            use windows_sys::Win32::System::Threading::{
+                CREATE_NEW_PROCESS_GROUP, CREATE_NO_WINDOW,
+            };
             self.inner
                 .creation_flags(CREATE_NEW_PROCESS_GROUP | CREATE_NO_WINDOW);
         }
