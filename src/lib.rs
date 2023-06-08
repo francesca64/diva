@@ -18,6 +18,7 @@ pub use std::process::{ChildStderr, ChildStdin, ChildStdout, ExitStatus, Stdio};
 use std::{
     ffi::OsStr,
     fmt::{self, Display},
+    path::Path,
     process,
 };
 
@@ -99,6 +100,18 @@ impl Command {
     /// Get the command's string representation.
     pub fn display(&self) -> &str {
         &self.display
+    }
+
+    pub fn set_cwd(&mut self, cwd: impl AsRef<Path>) -> &mut Self {
+        let cwd = cwd.as_ref();
+        log::debug!("setting cwd to {cwd:?} on command {:?}", self.display);
+        self.inner.current_dir(cwd);
+        self
+    }
+
+    pub fn with_cwd(mut self, cwd: impl AsRef<Path>) -> Self {
+        self.set_cwd(cwd);
+        self
     }
 
     pub fn set_stdin(&mut self, cfg: impl Into<Stdio>) -> &mut Self {
