@@ -14,7 +14,6 @@ mod result {
 
 pub use self::{error::*, handle::*, output::*, result::*};
 pub use std::process::{ChildStderr, ChildStdin, ChildStdout, ExitStatus, Stdio};
-
 use std::{
     ffi::OsStr,
     fmt::{self, Display},
