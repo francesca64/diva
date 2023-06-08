@@ -1,27 +1,25 @@
-# `bossy`
+# `diva`
 
-[![crates.io badge](http://meritbadge.herokuapp.com/bossy)](https://crates.io/crates/bossy)
-[![docs.rs badge](https://docs.rs/bossy/badge.svg)](https://docs.rs/bossy)
-[![CI Status](https://github.com/BrainiumLLC/bossy/workflows/CI/badge.svg)](https://github.com/BrainiumLLC/bossy/actions)
+[![crates.io badge](http://meritbadge.herokuapp.com/diva)](https://crates.io/crates/diva)
+[![docs.rs badge](https://docs.rs/diva/badge.svg)](https://docs.rs/diva)
+[![CI Status](https://github.com/francesca64/diva/workflows/CI/badge.svg)](https://github.com/francesca64/diva/actions)
 
-Opinionated convenience wrappers for `std::process::Command` and friends.
-
-This crate arose from patterns I found while working on [`cargo-mobile`](https://github.com/BrainiumLLC/cargo-mobile), which does a *ton* of subprocessing. In my not-entirely-humble opinion, `bossy` makes working with commands super convenient!
+The continuation of [`bossy`](https://github.com/BrainiumLLC/bossy), an opinionated convenience wrappers for `std::process::Command` and friends.
 
 ```rust
-use bossy::Command;
+use diva::Command;
 use std::{io::Write as _, path::Path};
 
-// `bossy::Error` contains detailed error information; the process failing to
+// `diva::Error` contains detailed error information; the process failing to
 // spawn, the process exiting with a non-zero status, stderr contents, etc.
 // For commands with piped output, you'll even have access to the stdout
 // contents.
-fn main() -> bossy::Result<()> {
+fn main() -> diva::Result<()> {
     // We generate a ton of helpful logging, if you're into that sort of thing.
     simple_logger::init().unwrap();
 
     let path = Path::new("src");
-    println!("{:?} directory contents:", path);
+    println!("{path:?} directory contents:");
     // `impure` indicates that this command inherits the parent process's
     // environment. For more reproducability, you can use `pure` to get a
     // completely empty environment.
@@ -36,14 +34,14 @@ fn main() -> bossy::Result<()> {
         // - `run_and_wait` (equivalent to `status`)
         // - `run_and_wait_for_output` (equivalent to `output`)
         .run_and_wait()?;
-    // `bossy::ExitStatus` is just a re-export of `std::process::ExitStatus`.
+    // `diva::ExitStatus` is just a re-export of `std::process::ExitStatus`.
     println!("exited with code {:?}", status.code());
 
     let readme_output = Command::impure_parse("cat README.md")
         // Just like with `std::process::Command::output`, this will
         // automatically pipe stdout and stderr.
         .run_and_wait_for_output()?;
-    // `bossy::Output` has cute conveniences for the very common task of
+    // `diva::Output` has cute conveniences for the very common task of
     // converting output to a string.
     println!(
         "README.md contents:\n{}",
@@ -53,7 +51,7 @@ fn main() -> bossy::Result<()> {
     );
 
     let mut handle = Command::impure("shasum")
-        // We also have methods that let you set these using `bossy::Stdio`
+        // We also have methods that let you set these using `diva::Stdio`
         // (which is currently just a re-export of `std::process::Stdio`), but
         // this spares you some typing and an import.
         .with_stdin_piped()
@@ -66,7 +64,7 @@ fn main() -> bossy::Result<()> {
         .expect("developer error: `handle` stdin not captured")
         .write_all(readme_output.stdout())
         .expect("failed to write to `handle` stdin");
-    // `bossy::Handle` is very similar to `std::process::Child`, but will
+    // `diva::Handle` is very similar to `std::process::Child`, but will
     // log an error message if it's dropped without being waited on.
     let shasum_output = handle.wait_for_output()?;
     println!(

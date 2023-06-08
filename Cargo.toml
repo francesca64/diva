@@ -1,15 +1,15 @@
 [package]
-name = "bossy"
-version = "0.2.1"
-authors = ["Brainium Studios LLC", "Francesca Lovebloom <francesca@brainiumstudios.com>"]
-edition = "2018"
+name = "diva"
+version = "0.0.0"
+authors = ["Francesca Lovebloom <franlovebloom@gmail.com>"]
+edition = "2021"
 description = "Opinionated convenience wrappers for `std::process::Command` and friends."
-documentation = "https://docs.rs/bossy"
-repository = "https://github.com/BrainiumLLC/bossy"
+documentation = "https://docs.rs/diva"
+repository = "https://github.com/francesca64/diva"
 readme = "README.md"
 keywords = ["process", "shell", "command"]
 categories = ["rust-patterns"]
-license = "Apache-2.0/MIT"
+license = "Apache-2.0 OR MIT"
 
 [dependencies]
 log = "0.4.11"
@@ -21,4 +21,4 @@ libc = "0.2.81"
 winapi = { version = "0.3.9", features = ["minwinbase"] }
 
 [dev-dependencies]
-simple_logger = "1.11.0"
+simple_logger = "4.1.0"
