@@ -12,10 +12,10 @@ fn main() -> diva::Result<()> {
 
     let path = Path::new("src");
     println!("{path:?} directory contents:");
-    // `impure` indicates that this command inherits the parent process's
-    // environment. For more reproducability, you can use `pure` to get a
-    // completely empty environment.
-    let status = Command::impure_parse("ls -l")
+    // By default, commands inherits the parent process's environment. For more
+    // reproducability, you can call `pure` afterwards to get a completely
+    // empty environment.
+    let status = Command::parse("ls -l")
         // `std::process::Command::arg` takes `&mut self` and returns
         // `&mut Self`; our equivalent of that is `add_arg`, but I personally
         // prefer using `with_arg`, which takes `self` and returns `Self`.
@@ -29,7 +29,7 @@ fn main() -> diva::Result<()> {
     // `diva::ExitStatus` is just a re-export of `std::process::ExitStatus`.
     println!("exited with code {:?}", status.code());
 
-    let readme_output = Command::impure_parse("cat README.md")
+    let readme_output = Command::parse("cat README.md")
         // Just like with `std::process::Command::output`, this will
         // automatically pipe stdout and stderr.
         .run_and_wait_for_output()?;
@@ -42,7 +42,7 @@ fn main() -> diva::Result<()> {
             .expect("README.md contained invalid utf-8")
     );
 
-    let mut handle = Command::impure("shasum")
+    let mut handle = Command::new("shasum")
         // We also have methods that let you set these using `diva::Stdio`
         // (which is currently just a re-export of `std::process::Stdio`), but
         // this spares you some typing and an import.

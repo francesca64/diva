@@ -42,8 +42,9 @@ impl Command {
         self.display.push_str(component.to_string_lossy().as_ref());
     }
 
-    /// Start building a command that inherits all env vars from the environment.
-    pub fn impure(name: impl AsRef<OsStr>) -> Self {
+    /// Start building a command. By default, it inherits all env vars from the
+    /// environment; if that's undesirable, call `pure` afterwards.
+    pub fn new(name: impl AsRef<OsStr>) -> Self {
         let name = name.as_ref();
         let mut this = Self {
             inner: process::Command::new(name),
@@ -53,47 +54,32 @@ impl Command {
         this
     }
 
-    /// Start building a command with a completely clean environment. Note that
-    /// at minimum, you'll often want to add `PATH` and `TERM` to the environment
-    /// for things to function as expected.
-    pub fn pure(name: impl AsRef<OsStr>) -> Self {
-        let mut this = Self::impure(name);
-        this.inner.env_clear();
-        this
-    }
-
-    /// The same as `impure`, but parses the command from a string of
+    /// The same as `new`, but parses the command from a string of
     /// whitespace-separated args, just like how you'd write the command in a
     /// terminal.
-    pub fn try_impure_parse(arg_str: impl AsRef<str>) -> Option<Self> {
+    pub fn try_parse(arg_str: impl AsRef<str>) -> Option<Self> {
         let arg_str = arg_str.as_ref();
         let mut args = arg_str.split_whitespace();
         args.next().map(|name| {
-            let mut this = Self::impure(name);
+            let mut this = Self::new(name);
             this.add_args(args);
             this
         })
     }
 
-    /// The same as `try_impure_parse`, but panics if given an empty string.
-    pub fn impure_parse(arg_str: impl AsRef<str>) -> Self {
-        Self::try_impure_parse(arg_str).expect("passed an empty string to `impure_parse`")
+    /// The same as `try_parse`, but panics if given an empty string.
+    pub fn parse(arg_str: impl AsRef<str>) -> Self {
+        Self::try_parse(arg_str).expect("passed an empty string to `parse`")
     }
 
-    /// The same as `pure`, but parses the command from a string of
-    /// whitespace-separated args, just like how you'd write the command in a
-    /// terminal.
-    pub fn try_pure_parse(arg_str: impl AsRef<str>) -> Option<Self> {
-        let mut this = Self::try_impure_parse(arg_str);
-        if let Some(this) = this.as_mut() {
-            this.inner.env_clear();
-        }
-        this
-    }
-
-    /// The same as `try_pure_parse`, but panics if given an empty string.
-    pub fn pure_parse(arg_str: impl AsRef<str>) -> Self {
-        Self::try_pure_parse(arg_str).expect("passed an empty string to `pure_parse`")
+    /// Gives the command a completely clean environment for improved
+    /// determinism.
+    ///
+    /// Note that at minimum, you'll often want to add `PATH` and `TERM` to the
+    /// environment for things to function as expected.
+    pub fn pure(mut self) -> Self {
+        self.inner.env_clear();
+        self
     }
 
     /// Get the command's string representation.
