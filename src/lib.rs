@@ -351,4 +351,9 @@ impl Command {
     pub fn run_and_wait_for_string(&mut self) -> Result<String> {
         self.run_and_wait_for_str(ToOwned::to_owned)
     }
+
+    // If only function composition were elegant...
+    pub fn run_and_wait_for_trimmed(&mut self) -> Result<String> {
+        self.run_and_wait_for_str(|s| s.trim().to_string())
+    }
 }

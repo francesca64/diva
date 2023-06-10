@@ -6,4 +6,5 @@
 
 - **Breaking:** Removed explicit `pure`/`impure` constructors; commands now inherit the environment by default, and the `pure` method can be called to clean the environment.
 - Added methods to `diva::Command` for setting the current working directory.
+- Added `run_and_wait_for_trimmed` convenience method due to overwhelming ubiquity.
 - Fixed Windows build.
