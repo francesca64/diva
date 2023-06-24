@@ -1,6 +1,6 @@
 [package]
 name = "diva"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Francesca Lovebloom <franlovebloom@gmail.com>"]
 edition = "2021"
 description = "Opinionated convenience wrappers for `std::process::Command` and friends."
