@@ -4,7 +4,7 @@
 [![docs.rs badge](https://docs.rs/diva/badge.svg)](https://docs.rs/diva)
 [![CI Status](https://github.com/francesca64/diva/workflows/CI/badge.svg)](https://github.com/francesca64/diva/actions)
 
-The continuation of [`bossy`](https://github.com/BrainiumLLC/bossy), an opinionated convenience wrapper for `std::process::Command` and friends.
+The continuation of [`bossy`](https://github.com/BrainiumLLC/bossy): opinionated convenience wrappers for `std::process::Command` and friends!
 
 ```rust
 use diva::Command;
